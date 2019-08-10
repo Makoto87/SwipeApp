@@ -42,16 +42,22 @@ class ViewController: UIViewController {
     // いいねをされた人の名前の配列
     var likedName: [String] = []
     
+    // viewが表示される直前に呼ばれる
+    override func viewWillAppear(_ animated: Bool) {
+        // super.~ は親クラス(ここではUIViewController)のメソッドを使うことができる
+        super.viewWillAppear(animated)
+        // カードのカウントをもとに戻す
+        selectedCardCount = 0
+        // いいねの数をリセット
+        likedName = []
+    }
+    
     
     // viewのレイアウト処理が完了したときに呼ばれる
     override func viewDidLayoutSubviews() {
         // ベースカードの中心を代入
         centerOfCard = baseCard.center
     }
-    
-    
-    
-    
     
     
     override func viewDidLoad() {
@@ -62,6 +68,13 @@ class ViewController: UIViewController {
         personList.append(person3)
         personList.append(person4)
         personList.append(person5)
+    }
+    
+    
+    // 離れたあとに行われる処理
+    override func viewDidDisappear(_ animated: Bool) {
+        // 飛んでいったviewを元の位置に戻すメソッド
+        resetPersonList()
     }
     
     // overrideはUIViewController内に用意されているものを使う
@@ -80,6 +93,16 @@ class ViewController: UIViewController {
     func resetCard() {
         baseCard.center = centerOfCard
         baseCard.transform = .identity
+    }
+    
+    // 結果後、カードをもとに戻す関数
+    func resetPersonList() {
+        // 5人の飛んで行ったビューを元の位置に戻す
+        for person in personList {
+            // 元に戻す処理。中心に戻す
+            person.center = self.centerOfCard
+            person.transform = .identity
+        }
     }
 
     
@@ -207,6 +230,52 @@ class ViewController: UIViewController {
         
         
     }
+    
+    // badボタン
+    @IBAction func dislikedButtonTapped(_ sender: Any) {
+        UIView.animate(withDuration: 0.5, animations: {
+            // X座標を左に500とばす(-500) = 大きく飛ばす
+            self.personList[self.selectedCardCount].center = CGPoint(x: self.personList[self.selectedCardCount].center.x - 500, y :self.personList[self.selectedCardCount].center.y)
+            
+            // ベースカードの距離と角度を戻すメソッド。ユーザーカードだけ飛ばす
+            self.resetCard()
+            
+            
+        })
+        
+        // 次のカードへ行く処理
+        selectedCardCount += 1
+        // カードの数が用意された人より多くなったときに遷移する
+        if selectedCardCount >= personList.count {
+            performSegue(withIdentifier: "ToLikedList", sender: self)
+        }
+        return
+    }
+    
+    // いいねボタン
+    @IBAction func likedButtonTapped(_ sender: Any) {
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            // X座標を右に500とばす(+500)
+            self.personList[self.selectedCardCount].center = CGPoint(x: self.personList[self.selectedCardCount].center.x + 500, y :self.personList[self.selectedCardCount].center.y)
+            
+            self.resetCard()
+            
+            
+        })
+        
+        // いいねした人の名前を配列に追加。カウントする前に入れなければ次の人の名前が入る
+        likedName.append(nameList[selectedCardCount])
+        selectedCardCount += 1
+        
+        
+        if selectedCardCount >= personList.count {
+            performSegue(withIdentifier: "ToLikedList", sender: self)
+        }
+        return
+    }
+    
+    
     
     
 

@@ -241,6 +241,9 @@
                                     <constraint firstAttribute="height" constant="70" id="mWE-g0-WXO"/>
                                 </constraints>
                                 <state key="normal" title="Button" image="ハート"/>
+                                <connections>
+                                    <action selector="likedButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tz7-Uy-0BN"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b9N-wp-Rsf">
                                 <rect key="frame" x="40" y="752" width="70" height="70"/>
@@ -249,6 +252,9 @@
                                     <constraint firstAttribute="height" constant="70" id="sM9-gR-hXq"/>
                                 </constraints>
                                 <state key="normal" title="Button" image="バツ"/>
+                                <connections>
+                                    <action selector="dislikedButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qZj-2E-iRd"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Dw-Sl-mAE">
                                 <rect key="frame" x="0.0" y="88" width="414" height="624"/>
